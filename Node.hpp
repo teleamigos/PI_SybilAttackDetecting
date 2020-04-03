@@ -2,7 +2,7 @@
                           Class Node Definition
 ------------------------------------------------------------------------------*/
 #ifndef Node_hpp
-#def Node_hpp
+#define Node_hpp
 #include <iostream>
 using namespace std;
 class Node
@@ -10,12 +10,13 @@ class Node
 private:
   uint8_t ID;
   uint8_t message_type=0x00;
-  uint32_t message;
+  uint32_t message=0x00;
   //vector<uint8_t> Neighboors;
   //vector<uint8_t> Fake_nodes;
 public:
   /*Constructors*/
   Node()=default;
+  Node(uint8_t id);
   Node(uint8_t id,uint8_t messaget,uint32_t msj);
   Node(const Node &nodo);
   /*Getters*/
