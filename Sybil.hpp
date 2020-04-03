@@ -1,8 +1,8 @@
 /*------------------------------------------------------------------------------
-                          Class Node Definition
+                      Class Sybil_Node Definition
 ------------------------------------------------------------------------------*/
 #ifndef Sybil_hpp
-#def Sybil_hpp
+#define Sybil_hpp
 #include <iostream>
 #include <vector>
 #include "Node.hpp"
@@ -11,7 +11,7 @@ class Sybil
 {
 private:
   vector<Node> sybil_nodes;
-  int N;
+  int N=0;
 public:
   /*Constructors*/
   Sybil()=default;
