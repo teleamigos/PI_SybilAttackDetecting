@@ -23,6 +23,7 @@ public:
   void setSybilNodes(vector<Node> sn);
   void setN(int n);
   /*Methods*/
-  void AddSybilNodes(uint8_t id);
+  void AddSybilNodes(uint8_t id,uint8_t packet_n);
+
 };
 #endif

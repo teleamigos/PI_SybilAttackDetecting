@@ -26,8 +26,8 @@ void Sybil::setN(int n){
   this->N=n;
 }
 /*Methods*/
-void Sybil::AddSybilNodes(uint8_t id){
-  Node temp (id);
+void Sybil::AddSybilNodes(uint8_t id,uint8_t packet_n){
+  Node temp (id,packet_n);
   this->sybil_nodes.push_back(id);
   this->N++;
 }
