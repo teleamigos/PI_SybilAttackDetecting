@@ -1,4 +1,4 @@
-#include "Heltec.h"
+#include "heltec.h"
 #include "Node.hpp"
 #include "Sybil.hpp"
 
@@ -9,8 +9,7 @@ uint8_t id1,id2;
 int n;
 uint32_t message;
 //vector<Node> sybil_nodes;
-id1=0x02;
-id2=0x03;
+
 //Node fake1,fake2;
 Sybil sybil_nodes;
 
@@ -20,6 +19,8 @@ void setup() {
   LoRa.setSpreadingFactor(7);
   LoRa.onReceive(onReceive);
   LoRa.receive();
+  id1=0x02;
+  id2=0x03;
   sybil_nodes.AddSybilNodes(id1,C);
   sybil_nodes.AddSybilNodes(id2,C);
 }
@@ -33,10 +34,11 @@ void loop() {
     for(i=0;i<n;i++)
     {
       message=sybil_nodes.S_Pack(i,C);
-      SendMessage(message);
+      sendMessage(message);
     }
-    LoRa.receive();
+    //LoRa.receive();
   }
+  C=0x00;
 
 }
 void sendMessage(uint32_t outgoing)
@@ -58,8 +60,7 @@ void onReceive(int packetsize)
   }
   else{
     uint32_t incoming = LoRa.read();
-    pac_n=this_node.Unpack();
+    //pac_n=this_node.Unpack();
     Serial.println("Message received");
   }
 }
-
