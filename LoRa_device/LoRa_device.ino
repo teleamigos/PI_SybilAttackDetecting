@@ -36,7 +36,7 @@ void loop() {
     LoRa.receive();
   }
 
-  c=0x00;
+  C=0x00;
   
 }
 
@@ -53,13 +53,15 @@ void sendMessage(uint32_t outgoing)
 void onReceive(int packetsize)
 {
   uint8_t pac_n;
+  float rssi;
   if(packetsize==0)
   {
     return;
   }
   else{
     uint32_t incoming = LoRa.read();
-    pac_n=this_node.Unpack();
+    rssi = LoRa.packetRssi();
+    pac_n=node.Unpack(incoming,rssi);
     Serial.println("Message received");
   }
   if(pac_n>=10)
@@ -70,4 +72,3 @@ void onReceive(int packetsize)
   }
   
 }
-
