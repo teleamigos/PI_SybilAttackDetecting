@@ -46,6 +46,14 @@ vector<float> Node::getRSSI_Neighboors()const
 {
   return this->RSSI_Neighboors;
 }
+vector<uint8_t> Node::getFake_Nodes()const
+{
+  return this->Fake_nodes;
+}
+vector<float> Node::getRange_Tol()const
+{
+  return this->range_tol;
+}
 /*Setters*/
 void Node::setID(uint8_t id)
 {
@@ -63,10 +71,14 @@ void Node::Message(uint32_t msj)
 {
   this->message=msj;
 }
+void Node::setRange_Tol(vector<float>  new_range)
+{
+  //
+}
 /*Methods*/
 void Node::Pack()
 {
-  if(this->message_type==0x2)
+  if(this->message_type==0x0)
   {
     this->message=(this->message_type<<24)+(this->packet_number<<16)+(this->ID<<8);
   }
@@ -75,22 +87,83 @@ uint8_t Node::Unpack(uint32_t received,float RSSI)
 {
     uint8_t type = (received >> 24);
     uint8_t id,c;
-    if(type ==0x2)
+    if(type ==0x0)
     {
        c=(received>>16);
        id=(received>>8);
        this->Neighboors.push_back(id);
        this->RSSI_Neighboors.push_back(RSSI);
     }
-    retunr c;
+    return c;
 }
 void Node::Discard()
 {
   //In order to discard fake nodes, this method compare a RSSI received with
   // a RSSI standar for many distances.
 
+  int i,j;
+  vector<uint8_t> id_list;
+  vector<float> rssi_prom;
+  bool aux;
+  size_t tam;
+  float rssi_aux,c,r_error;
+  for (i=0;i<this->Neighboors.size();i++)
+  {
+       /*Resume ID list*/
+       aux=false;
+       if(id_list.size()==0)
+       {
+           /*If is empty, add the first id*/
+           id_list.push_back(this->Neighboors.at(i));
+
+        }
+       else
+       {
+           /*In other way, find the currently ID in the list and only add it if it is not yet*/
+           tam=id_list.size();
+           for(j=0;j<tam;j++)
+           {
+               if(this->Neighboors.at(i)==id_list.at(j))
+               {
+                   aux=true;
+               }
+           }
+           if(aux==false)
+           {
+               id_list.push_back(this->Neighboors.at(i));
+           }
+       }
+  }
+  for(i=0;i<id_list.size();i++)
+  {
+      rssi_aux=0;
+      c=0;
+      for(j=0;j<this->Neighboors.size();j++)
+      {
+        if(id_list.at(i)==this->Neighboors.at(j))
+        {
+          rssi_aux+=this->RSSI_Neighboors.at(j);
+          c++;
+        }
+      }
+      rssi_prom.push_back(rssi_aux/c);
+  }
+  r_error=rssi_prom.at(0)-rssi_prom.at(1);
+//define distance
+//GetDistance
+  if (r_error>this->range_tol.at(0))
+  {
+       this->Fake_nodes=id_list;
+  }
 }
 void Node::GenerateDocument()
 {
   //
+}
+
+void Node::Clear_List()
+{
+  this->Neighboors.clear();
+  this->RSSI_Neighboors.clear();
+  this->Fake_nodes.clear();
 }
