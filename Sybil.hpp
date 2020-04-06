@@ -24,6 +24,7 @@ public:
   void setN(int n);
   /*Methods*/
   void AddSybilNodes(uint8_t id,uint8_t packet_n);
+  uint32_t S_Pack(int index,uint8_t packet_n);
 
 };
 #endif
