@@ -31,8 +31,9 @@ void loop() {
     node.Pack();
     message=node.getMessage();
     //Envia
-    
+    sendMessage(message);
     //Recibe
+    LoRa.receive();
   }
 
   c=0x00;
