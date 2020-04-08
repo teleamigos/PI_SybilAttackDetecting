@@ -1,74 +1,75 @@
 #include "heltec.h"
 #include "Node.hpp"
+#define BAND    433E6  //you can set band here directly,e.g. 868E6,915E6
 
-#define BAND 433E6
-
-uint8_t ID=0x01;
-uint8_t C=0x0;
-uint8_t tm=0x00;
-uint32_t message;
-
-Node node;
-
-void setup() {
-  //LoRa init
-  Heltec.begin(true,true,true,true,BAND);
-  LoRa.setSpreadingFactor(7);
+  
+byte type_message;      
+char id;             
+byte msgCount = 0;            
+long lastSendTime = 0;        
+int interval = 2000;          
+void setup()
+{
+  
+  Heltec.begin(true , true , true , true, BAND );
   LoRa.onReceive(onReceive);
   LoRa.receive();
-  //Node init
-  node.setID(ID);
-  
+  Serial.println("Heltec.LoRa init succeeded.");
 }
 
-
-void loop() {
-
-  while (C<=0x10){
-    //Empaqueta
-    node.setPacket_Number(C);
-    node.setMessage_Type(tm);
-    node.Pack();
-    message=node.getMessage();
-    //Envia
-    sendMessage(message);
-    //Recibe
-    LoRa.receive();
-  }
-
-  C=0x00;
-  
-}
-
-void sendMessage(uint32_t outgoing)
+void loop()
 {
-  LoRa.beginPacket();
-  LoRa.write(outgoing);
-  LoRa.print(outgoing);
-  LoRa.endPacket();
-
-  C++;
+  
+  
+  if (millis() - lastSendTime > interval)
+  {
+    id='1';
+    sendMessage(id);
+    Serial.println("Sending ");
+    Serial.println(id);
+    lastSendTime = millis();            
+    interval = random(2000) + 1000;     
+    LoRa.receive();                     
+  }
 }
 
-void onReceive(int packetsize)
+void sendMessage(char outgoing)
 {
-  uint8_t pac_n;
-  float rssi;
-  if(packetsize==0)
-  {
-    return;
-  }
-  else{
-    uint32_t incoming = LoRa.read();
-    rssi = LoRa.packetRssi();
-    pac_n=node.Unpack(incoming,rssi);
-    Serial.println("Message received");
-  }
-  if(pac_n>=10)
-  {
-    node.Discard();
-    node.GenerateDocument();
-    node.Clear_List();
-  }
-  
+  LoRa.beginPacket();                   // start packet
+  LoRa.write(type_message);
+  LoRa.write(msgCount);
+  LoRa.print(outgoing);                 
+  LoRa.endPacket();                     
+  msgCount++;                           
+}
+
+void onReceive(int packetSize)
+{
+  if (packetSize == 0) return;          // if there's no packet, return
+
+  // read packet header bytes:
+  //int recipient = LoRa.read();          
+  //byte sender = LoRa.read();            
+  byte tm = LoRa.read();     
+  byte counter = LoRa.read();    
+
+  //String incoming = "";                 
+ char incoming;
+
+    incoming =LoRa.read();      
+
+  Serial.println("hello received!");
+  Serial.println(incoming);
+  Serial.println("RSSI: " + String(LoRa.packetRssi()));
+  Serial.println("Snr: " + String(LoRa.packetSnr()));
+
+
+  // if message is for this device, or broadcast, print details:
+  //Serial.println("Received from: 0x" + String(sender, HEX));
+  //Serial.println("Sent to: 0x" + String(recipient, HEX));
+  //Serial.println("Message ID: " + String(incomingMsgId));
+  //Serial.println("Message length: " + String(incomingLength));
+  //Serial.println("Message: " + incoming);
+
+  //Serial.println();
 }
