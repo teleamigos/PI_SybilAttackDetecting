@@ -3,11 +3,14 @@
 #define BAND    433E6  //you can set band here directly,e.g. 868E6,915E6
 
   
-byte type_message;      
-char id;             
+byte type_message=0x0;      
+char id='1';             
 byte msgCount = 0;            
 long lastSendTime = 0;        
-int interval = 2000;          
+int interval = 2000;
+
+Node n;
+          
 void setup()
 {
   
@@ -15,6 +18,7 @@ void setup()
   LoRa.onReceive(onReceive);
   LoRa.receive();
   Serial.println("Heltec.LoRa init succeeded.");
+  n.setID(id);
 }
 
 void loop()
@@ -23,8 +27,9 @@ void loop()
   
   if (millis() - lastSendTime > interval)
   {
-    id='1';
-    sendMessage(id);
+    n.setMessage_Type(type_message);
+    n.setPacket_Nuber(msgCount);
+    sendMessage(n);
     Serial.println("Sending ");
     Serial.println(id);
     lastSendTime = millis();            
@@ -33,12 +38,12 @@ void loop()
   }
 }
 
-void sendMessage(char outgoing)
+void sendMessage(Node sender)
 {
   LoRa.beginPacket();                   // start packet
-  LoRa.write(type_message);
-  LoRa.write(msgCount);
-  LoRa.print(outgoing);                 
+  LoRa.write(sender.getMessage_Type());
+  LoRa.write(sender.getPacket_Number());
+  LoRa.print(sender.getID());                 
   LoRa.endPacket();                     
   msgCount++;                           
 }
@@ -46,30 +51,29 @@ void sendMessage(char outgoing)
 void onReceive(int packetSize)
 {
   if (packetSize == 0) return;          // if there's no packet, return
-
-  // read packet header bytes:
-  //int recipient = LoRa.read();          
-  //byte sender = LoRa.read();            
+           
   byte tm = LoRa.read();     
   byte counter = LoRa.read();    
 
   //String incoming = "";                 
- char incoming;
+  char incoming;
 
-    incoming =LoRa.read();      
+  incoming =LoRa.read();      
+
+  n.Unpack(tm,counter,incoming,LoRa.packetRssi());
+  
 
   Serial.println("hello received!");
   Serial.println(incoming);
   Serial.println("RSSI: " + String(LoRa.packetRssi()));
   Serial.println("Snr: " + String(LoRa.packetSnr()));
 
-
-  // if message is for this device, or broadcast, print details:
-  //Serial.println("Received from: 0x" + String(sender, HEX));
-  //Serial.println("Sent to: 0x" + String(recipient, HEX));
-  //Serial.println("Message ID: " + String(incomingMsgId));
-  //Serial.println("Message length: " + String(incomingLength));
-  //Serial.println("Message: " + incoming);
-
+  if (counter==10)
+  {
+    Serial.println("discard...");
+    n.Discard();
+    n.GenerateDocument();
+    n.Clear_List();
+  }
   //Serial.println();
 }
