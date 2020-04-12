@@ -48,7 +48,8 @@ public:
   /*Methods*/
   //void Pack();
   void Unpack(char id,int RSSI);
-  void Discard();
+  vector<char> makeList();
+  void Discard(vector<char> id_list);
   void GenerateDocument();
   void Clear_List();
 };

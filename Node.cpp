@@ -72,17 +72,13 @@ void Node::Unpack(char id,int RSSI)
        this->Neighboors.push_back(id);
        this->RSSI_Neighboors.push_back(RSSI);
 }
-void Node::Discard()
-{
-  //In order to discard fake nodes, this method compare a RSSI received with
-  // a RSSI standar for many distances.
 
+vector<char> Node::makeList()
+{
   int i,j;
-  vector<char> id_list;
-  vector<float> rssi_prom;
   bool aux;
   size_t tam;
-  float rssi_aux,c,r_error;
+  vector<char> id_list;
   for (i=0;i<this->Neighboors.size();i++)
   {
        /*Resume ID list*/
@@ -110,6 +106,16 @@ void Node::Discard()
            }
        }
   }
+  return id_list;
+}
+void Node::Discard(vector<char> id_list)
+{
+  //In order to discard fake nodes, this method compare a RSSI received with
+  // a RSSI standar for many distances.
+
+  int i,j;
+  vector<float> rssi_prom;
+  float rssi_aux,c,r_error;
   for(i=0;i<id_list.size();i++)
   {
       rssi_aux=0;
