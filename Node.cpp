@@ -25,7 +25,7 @@ char Node::getID()const
 {
   return this->ID;
 }
-uint8_t Node::getMessate_Type()const
+uint8_t Node::getMessage_Type()const
 {
     return this->message_type;
 }
@@ -67,14 +67,10 @@ void Node::setRange_Tol(vector<float>  new_range)
   //
 }
 /*Methods*/
-uint8_t Node::Unpack(uint8_t type_message,uint8_t msg_counter,char id,float RSSI)
+void Node::Unpack(char id,int RSSI)
 {
-    if(type_message ==0x0)
-    {
        this->Neighboors.push_back(id);
        this->RSSI_Neighboors.push_back(RSSI);
-    }
-    return msg_counter;
 }
 void Node::Discard()
 {

@@ -34,7 +34,7 @@ public:
   Node(const Node &nodo);
   /*Getters*/
   char getID()const;
-  uint8_t getMessate_Type()const;
+  uint8_t getMessage_Type()const;
   uint8_t getPacket_Number()const;
   vector<char> getNeighboors()const;
   vector<float> getRSSI_Neighboors()const;
@@ -47,7 +47,7 @@ public:
   void setRange_Tol(vector<float> new_range);
   /*Methods*/
   //void Pack();
-  uint8_t Unpack(uint8_t type_message,uint8_t msg_counter,char id,float RSSI);
+  void Unpack(char id,int RSSI);
   void Discard();
   void GenerateDocument();
   void Clear_List();
