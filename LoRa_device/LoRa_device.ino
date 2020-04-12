@@ -12,6 +12,7 @@ char ID[10];
 int rssi[10];
 uint8_t type[10];
 int i;
+vector<char> fakes;
 
 Node n;
           
@@ -33,9 +34,12 @@ void loop()
     for(j=0;j<10;j++)
     {
       //n.Unpack(type[j],msgCount,ID[j],rssi[j]);
-      Serial.println(rssi[j]);
+      n.Unpack(ID[j],rssi[j]);
     }
     Serial.println("unpacked succesful");
+    n.Discard();
+    //n.Generate();
+    //n.clear();
     i=0;
   }
   if (millis() - lastSendTime > interval)
@@ -53,7 +57,7 @@ void loop()
 void sendMessage(Node sender)
 {
   LoRa.beginPacket();                   // start packet
-  LoRa.write(sender.getMessate_Type());
+  LoRa.write(sender.getMessage_Type());
   LoRa.write(sender.getPacket_Number());
   LoRa.print(sender.getID());                 
   LoRa.endPacket();
@@ -71,12 +75,11 @@ void onReceive(int packetSize)
   char incoming;
   incoming =LoRa.read();     
   int r=LoRa.packetRssi();
-  rssi[i]=r;
   Serial.println("hello received!");
   Serial.println(incoming);
   Serial.println("RSSI: " + String(LoRa.packetRssi()));
-  //n.Unpack(tm,counter,incoming,r);
-  ID[i]=incoming;
-  n.setID(ID[i]);
-  i++;
+    rssi[i]=r;
+    //n.Unpack(tm,counter,incoming,r);
+    ID[i]=incoming;
+    i++;
 }
