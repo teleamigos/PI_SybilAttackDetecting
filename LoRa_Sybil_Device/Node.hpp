@@ -14,7 +14,7 @@ private:
   uint8_t packet_number;
   //uint32_t message=0x00;
   vector<char> Neighboors;
-  vector<int> RSSI_Neighboors;
+  vector<float> RSSI_Neighboors;
   vector<char> Fake_nodes;
   vector<float> range_tol{
     0.1182,
@@ -37,7 +37,7 @@ public:
   uint8_t getMessage_Type()const;
   uint8_t getPacket_Number()const;
   vector<char> getNeighboors()const;
-  vector<int> getRSSI_Neighboors()const;
+  vector<float> getRSSI_Neighboors()const;
   vector<char> getFake_Nodes()const;
   vector<float> getRange_Tol()const;
   /*Setters*/
@@ -49,7 +49,7 @@ public:
   //void Pack();
   void Unpack(char id,int RSSI);
   vector<char> makeList();
-  bool Discard(vector<char> id_list);
+  void Discard(vector<char> id_list);
   void GenerateDocument();
   void Clear_List();
 };
