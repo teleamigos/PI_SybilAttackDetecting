@@ -9,13 +9,13 @@ using namespace std;
 class Node
 {
 private:
-  uint8_t ID;
+  char ID;
   uint8_t message_type=0x00;
   uint8_t packet_number;
-  uint32_t message=0x00;
-  vector<uint8_t> Neighboors;
-  vector<float> RSSI_Neighboors;
-  vector<uint8_t> Fake_nodes;
+  //uint32_t message=0x00;
+  vector<char> Neighboors;
+  vector<int> RSSI_Neighboors;
+  vector<char> Fake_nodes;
   vector<float> range_tol{
     0.1182,
     0.155,
@@ -29,28 +29,27 @@ private:
 public:
   /*Constructors*/
   Node()=default;
-  Node(uint8_t id,uint8_t packet_n);
-  Node(uint8_t id,uint8_t messaget,uint8_t packet_n,uint32_t msj);
+  Node(char id,uint8_t packet_n);
+  Node(char id,uint8_t type_message,uint8_t packet_n);
   Node(const Node &nodo);
   /*Getters*/
-  uint8_t getID()const;
-  uint8_t getMessate_Type()const;
+  char getID()const;
+  uint8_t getMessage_Type()const;
   uint8_t getPacket_Number()const;
-  uint32_t getMessage();
-  vector<uint8_t> getNeighboors()const;
-  vector<float> getRSSI_Neighboors()const;
-  vector<uint8_t> getFake_Nodes()const;
+  vector<char> getNeighboors()const;
+  vector<int> getRSSI_Neighboors()const;
+  vector<char> getFake_Nodes()const;
   vector<float> getRange_Tol()const;
   /*Setters*/
-  void setID(uint8_t id);
+  void setID(char id);
   void setMessage_Type(uint8_t messaget);
   void setPacket_Number(uint8_t packet_n);
-  void Message(uint32_t msj);
   void setRange_Tol(vector<float> new_range);
   /*Methods*/
-  void Pack();
-  uint8_t Unpack(uint32_t received,float RSSI);
-  void Discard();
+  //void Pack();
+  void Unpack(char id,int RSSI);
+  vector<char> makeList();
+  bool Discard(vector<char> id_list);
   void GenerateDocument();
   void Clear_List();
 };
