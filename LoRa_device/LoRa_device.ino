@@ -33,12 +33,10 @@ void loop()
   {
     for(j=0;j<10;j++)
     {
-      //n.Unpack(type[j],msgCount,ID[j],rssi[j]);
       n.Unpack(ID[j],rssi[j]);
     }
     Serial.println("unpacked succesful");
     lista=n.makeList();
-    //discard(n,lista);
     Serial.println("tam"+String(lista.size()));
     boolean ans=n.Discard(lista);
     if(ans){
@@ -54,7 +52,6 @@ void loop()
     else{
       Serial.println("fake nodes not detected!"); 
     }
-    //n.Generate();
     n.clear();
     i=0;
   }
@@ -80,33 +77,6 @@ void sendMessage(Node sender)
   Serial.println("Sending ");
   Serial.println(id);                     
   msgCount++;                           
-}
-
-void discard(Node n,vector<char> list)
-{
-  int i,j;
-  int rssi_aux;
-  float c;
-  vector<char> neigh;
-  vector<int> r;
-  vector<float> rssi_prom;
-  neigh=n.getNeighboors();
-  r=n.getRSSI_Neighboors();
-  for(i=0;i<list.size();i++)
-  {
-    rssi_aux=0;
-    c=0;
-    for(j=0;j<neigh.size();j++)
-    {
-      if(list.at(i)==neigh.at(j))
-      {
-        rssi_aux+=r.at(j);
-        c++;
-      }
-    }
-    rssi_prom.push_back(rssi_aux/c);
-  }
-  
 }
 
 void onReceive(int packetSize)

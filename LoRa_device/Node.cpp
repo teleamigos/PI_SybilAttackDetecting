@@ -132,7 +132,6 @@ bool Node::Discard(vector<char> id_list)
       }
       rssi_prom.push_back(rssi_aux/c);
   }
-  //r_error=1-1.5;
   if(rssi_prom.size()>1)
   {
       r_error=rssi_prom.at(0)-rssi_prom.at(1);
@@ -146,6 +145,9 @@ bool Node::Discard(vector<char> id_list)
   else{
     return false;
   }
+  }
+  else{
+    return false;
   }
 
 }
