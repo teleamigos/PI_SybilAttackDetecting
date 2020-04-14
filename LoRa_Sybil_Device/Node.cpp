@@ -37,7 +37,7 @@ vector<char> Node::getNeighboors()const
 {
   return this->Neighboors;
 }
-vector<float> Node::getRSSI_Neighboors()const
+vector<int> Node::getRSSI_Neighboors()const
 {
   return this->RSSI_Neighboors;
 }
@@ -108,14 +108,16 @@ vector<char> Node::makeList()
   }
   return id_list;
 }
-void Node::Discard(vector<char> id_list)
+bool Node::Discard(vector<char> id_list)
 {
   //In order to discard fake nodes, this method compare a RSSI received with
   // a RSSI standar for many distances.
 
   int i,j;
-  vector<float> rssi_prom;
-  float rssi_aux,c,r_error;
+  vector<int> rssi_prom;
+  int rssi_aux,r_error;
+  float c;
+  int a,b;
   for(i=0;i<id_list.size();i++)
   {
       rssi_aux=0;
@@ -130,13 +132,24 @@ void Node::Discard(vector<char> id_list)
       }
       rssi_prom.push_back(rssi_aux/c);
   }
-  r_error=rssi_prom.at(0)-rssi_prom.at(1);
+  if(rssi_prom.size()>1)
+  {
+      r_error=rssi_prom.at(0)-rssi_prom.at(1);
 //define distance
 //GetDistance
   if (r_error>this->range_tol.at(0))
   {
        this->Fake_nodes=id_list;
+       return true;
   }
+  else{
+    return false;
+  }
+  }
+  else{
+    return false;
+  }
+
 }
 void Node::GenerateDocument()
 {
