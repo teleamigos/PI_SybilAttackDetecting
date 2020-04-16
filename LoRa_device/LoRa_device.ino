@@ -2,11 +2,11 @@
 #include "Node.hpp"
 #define BAND    433E6  //you can set band here directly,e.g. 868E6,915E6
 
-  
-byte type_message=0x0;      
-char id='1';             
-byte msgCount = 0;            
-long lastSendTime = 0;        
+
+byte type_message=0x0;
+char id='1';
+byte msgCount = 0;
+long lastSendTime = 0;
 int interval = 4000;
 char ID[10];
 int rssi[10];
@@ -15,10 +15,10 @@ int i;
 vector<char> fakes,lista;
 
 Node n;
-          
+
 void setup()
 {
-  
+
   Heltec.begin(true , true , true , true, BAND );
   LoRa.onReceive(onReceive);
   LoRa.receive();
@@ -46,11 +46,11 @@ void loop()
       {
         Serial.println("detected");
         Serial.println(fakes.at(j));
-        
+
       }
     }
     else{
-      Serial.println("fake nodes not detected!"); 
+      Serial.println("fake nodes not detected!");
     }
     n.clear();
     i=0;
@@ -61,9 +61,9 @@ void loop()
     n.setPacket_Number(msgCount);
     sendMessage(n);
 
-    lastSendTime = millis();            
-    interval = random(2000) + 1000;     
-    LoRa.receive();                     
+    lastSendTime = millis();
+    interval = random(2000) + 1000;
+    LoRa.receive();
   }
 }
 
@@ -72,27 +72,29 @@ void sendMessage(Node sender)
   LoRa.beginPacket();                   // start packet
   LoRa.write(sender.getMessage_Type());
   LoRa.write(sender.getPacket_Number());
-  LoRa.print(sender.getID());                 
+  LoRa.print(sender.getID());
   LoRa.endPacket();
   Serial.println("Sending ");
-  Serial.println(id);                     
-  msgCount++;                           
+  Serial.println(id);
+  //Serial.println(msgCount);
+  msgCount++;
 }
 
 void onReceive(int packetSize)
 {
- 
-  if (packetSize == 0) return;          // if there's no packet, return        
-  uint8_t tm = LoRa.read();    
-  uint8_t counter = LoRa.read();                     
+
+  if (packetSize == 0) return;          // if there's no packet, return
+  uint8_t tm = LoRa.read();
+  uint8_t counter = LoRa.read();
   char incoming;
-  incoming =LoRa.read();     
+  incoming =LoRa.read();
   int r=LoRa.packetRssi();
   Serial.println("hello received!");
   Serial.println(incoming);
   Serial.println("RSSI: " + String(LoRa.packetRssi()));
-    rssi[i]=r;
+  rssi[i]=r;
     //n.Unpack(tm,counter,incoming,r);
-    ID[i]=incoming;
-    i++;
+  ID[i]=incoming;
+  i++;
+  //n.setPacket_Number(counter);
 }

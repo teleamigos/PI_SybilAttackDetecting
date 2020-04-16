@@ -49,6 +49,14 @@ vector<float> Node::getRange_Tol()const
 {
   return this->range_tol;
 }
+uint8_t Node::getMsgCounter()const
+{
+  return this->msgCount;
+}
+uint8_t Node::getLast_msg()const
+{
+  return this->last_msg;
+}
 /*Setters*/
 void Node::setID(char id)
 {
@@ -66,11 +74,20 @@ void Node::setRange_Tol(vector<float>  new_range)
 {
   //
 }
+void Node::setMsg_Counter(uint8_t counter)
+{
+  this->msgCount=counter;
+}
+void Node::setLast_msg(uint8_t last)
+{
+  this->last_msg=last;
+}
 /*Methods*/
 void Node::Unpack(char id,int RSSI)
 {
        this->Neighboors.push_back(id);
        this->RSSI_Neighboors.push_back(RSSI);
+      this->msgCount++;
 }
 
 vector<char> Node::makeList()
@@ -150,6 +167,10 @@ bool Node::Discard(vector<char> id_list)
     return false;
   }
 
+}
+int LossPacket()
+{
+  //
 }
 void Node::GenerateDocument()
 {
