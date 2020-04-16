@@ -29,6 +29,7 @@ void setup()
 void loop()
 {
   int j;
+  int prom;
   if (i>=10)
   {
     for(j=0;j<10;j++)
@@ -39,6 +40,8 @@ void loop()
     lista=n.makeList();
     Serial.println("tam"+String(lista.size()));
     boolean ans=n.Discard(lista);
+    prom = n.LossPacket();
+    Serial.println(prom);
     if(ans){
       fakes=n.getFake_Nodes();
       Serial.println("tam nodes"+String(fakes.size()));
@@ -48,11 +51,12 @@ void loop()
         Serial.println(fakes.at(j));
 
       }
+      //n.setMsg_Counter(0);
     }
     else{
       Serial.println("fake nodes not detected!");
     }
-    n.clear();
+    n.Clear_List();
     i=0;
   }
   if (millis() - lastSendTime > interval)
@@ -96,5 +100,5 @@ void onReceive(int packetSize)
     //n.Unpack(tm,counter,incoming,r);
   ID[i]=incoming;
   i++;
-  //n.setPacket_Number(counter);
+  n.setLast_msg(counter);
 }
