@@ -156,7 +156,9 @@ bool Node::Discard(vector<char> id_list)
 //GetDistance
   if (r_error>this->range_tol.at(0))
   {
+
        this->Fake_nodes=id_list;
+       this->n_detected++;
        return true;
   }
   else{
