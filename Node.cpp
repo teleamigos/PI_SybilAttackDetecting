@@ -59,7 +59,7 @@ uint8_t Node::getLast_msg()const
 }
 int Node::getN_detected()const
 {
-  return this->f_cont;
+  return this->N_detected;
 }
 /*Setters*/
 void Node::setID(char id)
@@ -88,7 +88,7 @@ void Node::setLast_msg(uint8_t last)
 }
 void Node::setN_detected(int c)
 {
-  this->f_cont=c;
+  this->N_detected=c;
 }
 /*Methods*/
 void Node::Unpack(char id,int RSSI)
@@ -168,7 +168,7 @@ bool Node::Discard(vector<char> id_list)
        {
          this->Fake_nodes.push_back(id_list.at(i));
          //this->msgCounter++;
-         this->f_cont++;
+         this->N_detected++;
        }
        return true;
   }
