@@ -41,7 +41,7 @@ void loop()
     lista=n.makeList();
     //Serial.println("tam"+String(lista.size()));
     boolean ans=n.Discard(lista);
-    prom = n.LossPacket();
+    //prom = n.LossPacket();
     Serial.println(prom);
     if(ans){
       fakes=n.getFake_Nodes();
@@ -57,7 +57,7 @@ void loop()
       Serial.println("Fake nodes were detected : "+String(n_detected));
     }
     else{
-      Serial.println("fake nodes not detected!");
+      Serial.println("fake nodes were not detected!");
     }
     n.Clear_List();
     i=0;
@@ -81,8 +81,8 @@ void sendMessage(Node sender)
   LoRa.write(sender.getPacket_Number());
   LoRa.print(sender.getID());
   LoRa.endPacket();
-  Serial.println("Sending ");
-  Serial.println(id);
+  //Serial.println("Sending ");
+  //Serial.println(id);
   //Serial.println(msgCount);
   msgCount++;
 }

@@ -49,6 +49,18 @@ vector<float> Node::getRange_Tol()const
 {
   return this->range_tol;
 }
+uint8_t Node::getMsgCounter()const
+{
+  return this->msgCounter;
+}
+uint8_t Node::getLast_msg()const
+{
+  return this->last_msg;
+}
+int Node::getN_detected()const
+{
+  return this->N_detected;
+}
 /*Setters*/
 void Node::setID(char id)
 {
@@ -66,11 +78,24 @@ void Node::setRange_Tol(vector<float>  new_range)
 {
   //
 }
+void Node::setMsg_Counter(uint8_t counter)
+{
+  this->msgCounter=counter;
+}
+void Node::setLast_msg(uint8_t last)
+{
+  this->last_msg=last;
+}
+void Node::setN_detected(int c)
+{
+  this->N_detected=c;
+}
 /*Methods*/
 void Node::Unpack(char id,int RSSI)
 {
        this->Neighboors.push_back(id);
        this->RSSI_Neighboors.push_back(RSSI);
+      this->msgCounter++;
 }
 
 vector<char> Node::makeList()
@@ -139,7 +164,12 @@ bool Node::Discard(vector<char> id_list)
 //GetDistance
   if (r_error>this->range_tol.at(0))
   {
-       this->Fake_nodes=id_list;
+       for(i=0;i<id_list.size();i++)
+       {
+         this->Fake_nodes.push_back(id_list.at(i));
+         //this->msgCounter++;
+         this->N_detected++;
+       }
        return true;
   }
   else{
@@ -151,6 +181,12 @@ bool Node::Discard(vector<char> id_list)
   }
 
 }
+int Node::LossPacket()
+{
+  int prom;
+  prom=(this->msgCounter*100)/this->last_msg;
+  return prom;
+}
 void Node::GenerateDocument()
 {
   //
@@ -160,5 +196,5 @@ void Node::Clear_List()
 {
   this->Neighboors.clear();
   this->RSSI_Neighboors.clear();
-  this->Fake_nodes.clear();
+  //this->Fake_nodes.clear();
 }
