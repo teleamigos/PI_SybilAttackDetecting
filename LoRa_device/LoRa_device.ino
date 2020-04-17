@@ -8,9 +8,9 @@ char id='1';
 byte msgCount = 0;
 long lastSendTime = 0;
 int interval = 4000;
-char ID[10];
-int rssi[10];
-uint8_t type[10];
+//char ID[10];
+//int rssi[10];
+//uint8_t type[10];
 int i;
 vector<char> fakes,lista;
 
@@ -32,19 +32,20 @@ void loop()
   int prom;
   if (i>=10)
   {
+    /*
     for(j=0;j<10;j++)
     {
       n.Unpack(ID[j],rssi[j]);
-    }
-    Serial.println("unpacked succesful");
+    }*/
+
     lista=n.makeList();
-    Serial.println("tam"+String(lista.size()));
+    //Serial.println("tam"+String(lista.size()));
     boolean ans=n.Discard(lista);
     prom = n.LossPacket();
     Serial.println(prom);
     if(ans){
       fakes=n.getFake_Nodes();
-      Serial.println("tam nodes"+String(fakes.size()));
+      //Serial.println("tam nodes"+String(fakes.size()));
       for(j=0;j<fakes.size();j++)
       {
         Serial.println("detected");
@@ -52,6 +53,8 @@ void loop()
 
       }
       //n.setMsg_Counter(0);
+      int n_detected=n.getN_detected();
+      Serial.println("Fake nodes were detected : "+String(n_detected));
     }
     else{
       Serial.println("fake nodes not detected!");
@@ -96,9 +99,11 @@ void onReceive(int packetSize)
   Serial.println("hello received!");
   Serial.println(incoming);
   Serial.println("RSSI: " + String(LoRa.packetRssi()));
-  rssi[i]=r;
+  //rssi[i]=r;
     //n.Unpack(tm,counter,incoming,r);
-  ID[i]=incoming;
+  //ID[i]=incoming;
+  n.Unpack(incoming,r);
   i++;
   n.setLast_msg(counter);
+  Serial.println("unpacked succesful");
 }
