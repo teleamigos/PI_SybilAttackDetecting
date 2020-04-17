@@ -57,6 +57,10 @@ uint8_t Node::getLast_msg()const
 {
   return this->last_msg;
 }
+int Node::getN_detected()const
+{
+  return this->f_cont;
+}
 /*Setters*/
 void Node::setID(char id)
 {
@@ -81,6 +85,10 @@ void Node::setMsg_Counter(uint8_t counter)
 void Node::setLast_msg(uint8_t last)
 {
   this->last_msg=last;
+}
+void Node::setN_detected(int c)
+{
+  this->f_cont=c;
 }
 /*Methods*/
 void Node::Unpack(char id,int RSSI)
@@ -156,7 +164,12 @@ bool Node::Discard(vector<char> id_list)
 //GetDistance
   if (r_error>this->range_tol.at(0))
   {
-       this->Fake_nodes=id_list;
+       for(i=0;i<id_list.size();i++)
+       {
+         this->Fake_nodes.push_back(id_list.at(i));
+         //this->msgCounter++;
+         this->f_cont++;
+       }
        return true;
   }
   else{
@@ -183,5 +196,5 @@ void Node::Clear_List()
 {
   this->Neighboors.clear();
   this->RSSI_Neighboors.clear();
-  this->Fake_nodes.clear();
+  //this->Fake_nodes.clear();
 }

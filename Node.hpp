@@ -28,6 +28,7 @@ private:
     };
     uint8_t msgCounter;
     uint8_t last_msg;
+    int N_detected=0;
 public:
   /*Constructors*/
   Node()=default;
@@ -44,6 +45,7 @@ public:
   vector<float> getRange_Tol()const;
   uint8_t getMsgCounter()const;
   uint8_t getLast_msg()const;
+  int getN_detected()const;
   /*Setters*/
   void setID(char id);
   void setMessage_Type(uint8_t messaget);
@@ -51,6 +53,7 @@ public:
   void setRange_Tol(vector<float> new_range);
   void setMsg_Counter(uint8_t counter);
   void setLast_msg(uint8_t last);
+  void setN_detected(int c);
   /*Methods*/
   //void Pack();
   void Unpack(char id,int RSSI);
