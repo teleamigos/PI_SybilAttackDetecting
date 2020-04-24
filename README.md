@@ -12,4 +12,9 @@ a message of type "Hello" and reads its RSSI. When the node has received 10 mess
 
 1. We assume two nodes in the network (for this first version).
 2. This version don't compute distances.
-3. This version only use a Serial print (Arduino) to get results. 
+3. This version only use a Serial print (Arduino) to get results.
+
+## Version 1.1
+
+On this version we worked at Documentable function as generator of a
+report to sybil nodes detected.
