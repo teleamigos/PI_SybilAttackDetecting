@@ -3,10 +3,14 @@
 ------------------------------------------------------------------------------*/
 #ifndef Node_hpp
 #define Node_hpp
+
+#include "Documentable.hpp"
+
 #include <iostream>
 #include <vector>
+#include <fstream>
 using namespace std;
-class Node
+class Node : public Documentable
 {
 private:
   char ID;
@@ -29,11 +33,13 @@ private:
     uint8_t msgCounter;
     uint8_t last_msg;
     int N_detected=0;
+    string archivo="sybil_report.txt";
+    //std::ofstream output;
 public:
   /*Constructors*/
   Node()=default;
-  Node(char id,uint8_t packet_n);
-  Node(char id,uint8_t type_message,uint8_t packet_n);
+  explicit Node(char id,uint8_t packet_n);
+  explicit Node(char id,uint8_t type_message,uint8_t packet_n);
   Node(const Node &nodo);
   /*Getters*/
   char getID()const;
@@ -60,7 +66,7 @@ public:
   vector<char> makeList();
   bool Discard(vector<char> id_list);
   int LossPacket();
-  void GenerateDocument();
+  virtual void GenerateDocument()override;
   void Clear_List();
 };
 #endif
