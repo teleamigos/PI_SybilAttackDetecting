@@ -189,7 +189,36 @@ int Node::LossPacket()
 }
 void Node::GenerateDocument()
 {
-  //
+  //This function implemets a way to generate a document.
+  ofstream output;
+  bool isOpen;
+  string title,head,body,document;
+  string id;
+  int i,l;
+  output.open(this->archivo);
+  isOpen= not output ? false:true;
+  if(not isOpen)
+  {
+    cout<<"Error";
+  }
+  title = "------------------------------Report------------------------------";
+  head="Nodes detected as sybil nodes";
+  body = "\tNo.\t\tID node\t\n";
+  for(i=0;i<this->Fake_nodes.size();i++)
+  {
+    id=this->Fake_nodes.at(i);
+    body+="\t"+to_string(i+1)+"\t";
+    body+="\t\t\t"+id+"\t";
+    body+="\n";
+  }
+  l=100-LossPacket();
+  body+="\n\t\tOccurrences : \t"+to_string(this->N_detected)+"\n";
+  body+="\n\t\tPacket loss : \t"+to_string(l)+"%\n";
+  document=title+"\n";
+  document+="\t\t\t\t\t\t\t\t"+head+"\n";
+  document+=body;
+  output<<document;
+  output.clear();
 }
 
 void Node::Clear_List()
