@@ -47,6 +47,14 @@ long int* Hash::getHash()
 {
   return this->hash;
 }
+int Hash::getInput()const
+{
+  return this->input;
+}
+void Hash::setInput(int value)
+{
+  this->input=value;
+}
 /*methods*/
 
 void Hash::computeHash()
@@ -89,6 +97,7 @@ void Hash::computeHash()
   this->hash[5] = f + this->hash[5];
   this->hash[6] = g + this->hash[6];
   this->hash[7] = h + this->hash[7];
+
 }
 
 int Hash::ROTRIGHT(int value,int num)

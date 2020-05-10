@@ -12,6 +12,11 @@
 
 #include<cstdlib>
 #include <stdio.h>
+#include<iostream>
+
+#include <string>
+
+using namespace std;
 
 class Hash {
 private:
@@ -30,9 +35,10 @@ private:
   };
   //int size_in, tamano,input,a,b,c,d,e,f,g,h,i,s0,s1,maj,S0,S1,temp1,temp2,ch,i_time,f_time;
   int input;
+  string hash_out;
 public:
   /*Constructors*/
-    Hash();
+    Hash()=default;
     Hash(int value);
     //~Hash();
 /*Getters & setters*/
@@ -43,6 +49,8 @@ public:
     void setHash(int hash);
     void setInput(int value);*/
     long int* getHash();
+    int getInput()const;
+    void setInput(int value);
   /*Methods*/
     void computeHash();
     int ROTRIGHT(int value, int num);
