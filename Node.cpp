@@ -3,17 +3,22 @@
 ------------------------------------------------------------------------------*/
 #include "Node.hpp"
 /*Constructors*/
-Node::Node(char id,uint8_t packet_n):ID(id),packet_number(packet_n)
+Node::Node() : Hash()
 {
-        //Exceptions
+
+}
+Node::Node(char id,uint8_t packet_n):ID(id),packet_number(packet_n), Hash()
+{
+        //
+
 }
 Node::Node(char id,uint8_t type_message,uint8_t packet_n):ID(id),message_type(type_message),
-      packet_number(packet_n)
+      packet_number(packet_n), Hash()
 {
           //Exceptions
 }
 
-Node::Node(const Node &nodo)
+Node::Node(const Node &nodo) : Hash(nodo)
 {
   this->ID=nodo.ID;
   this->message_type=nodo.message_type;
@@ -226,4 +231,39 @@ void Node::Clear_List()
   this->Neighboors.clear();
   this->RSSI_Neighboors.clear();
   //this->Fake_nodes.clear();
+}
+
+int Node::MakeTarget(string timestamp)
+{
+  string target;
+  target = this->ID + timestamp;
+  int target_out;
+  target_out = stoi(target);
+  return target_out;
+}
+
+string Node::GenerateHash(int input)
+{
+  int i;
+  setInput(input);
+  computeHash();
+  long int *ihash;
+  ihash=getHash();
+    string hashed;
+    stringstream h;
+    h<<hex<<ihash[0];
+    h<<hex<<ihash[1];
+    h<<hex<<ihash[2];
+    h<<hex<<ihash[3];
+    h<<hex<<ihash[4];
+    h<<hex<<ihash[5];
+    h<<hex<<ihash[6];
+    h<<hex<<ihash[7];
+    hashed=h.str();
+    return hashed;
+}
+
+void Node::proofOfWork(int difficulty)
+{
+
 }

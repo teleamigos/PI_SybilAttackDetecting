@@ -5,12 +5,17 @@
 #define Node_hpp
 
 #include "Documentable.hpp"
+#include "Hash.hpp"
+#include "PoW.hpp"
 
 #include <iostream>
 #include <vector>
 #include <fstream>
+#include <string>
+#include <sstream>
 using namespace std;
-class Node : public Documentable
+class Node : public Documentable,public Hash,
+public PoW
 {
 private:
   char ID;
@@ -37,7 +42,7 @@ private:
     //std::ofstream output;
 public:
   /*Constructors*/
-  Node()=default;
+  Node();
   explicit Node(char id,uint8_t packet_n);
   explicit Node(char id,uint8_t type_message,uint8_t packet_n);
   Node(const Node &nodo);
@@ -68,5 +73,8 @@ public:
   int LossPacket();
   virtual void GenerateDocument()override;
   void Clear_List();
+  int MakeTarget(string timestamp);
+  string GenerateHash(int input);
+  virtual void proofOfWork(int difficulty)override;
 };
 #endif
