@@ -3,22 +3,22 @@
 ------------------------------------------------------------------------------*/
 #include "Node.hpp"
 /*Constructors*/
-Node::Node() : Hash()
+Node::Node() : SHA256()
 {
 
 }
-Node::Node(char id,uint8_t packet_n):ID(id),packet_number(packet_n), Hash()
+Node::Node(char id,uint8_t packet_n):ID(id),packet_number(packet_n), SHA256()
 {
         //
 
 }
 Node::Node(char id,uint8_t type_message,uint8_t packet_n):ID(id),message_type(type_message),
-      packet_number(packet_n), Hash()
+      packet_number(packet_n), SHA256()
 {
           //Exceptions
 }
 
-Node::Node(const Node &nodo) : Hash(nodo)
+Node::Node(const Node &nodo) :  SHA256()
 {
   this->ID=nodo.ID;
   this->message_type=nodo.message_type;
@@ -233,37 +233,40 @@ void Node::Clear_List()
   //this->Fake_nodes.clear();
 }
 
-int Node::MakeTarget(string timestamp)
+string Node::GenerateTarget(int difficulty)
 {
-  string target;
-  target = this->ID + timestamp;
-  int target_out;
-  target_out = stoi(target);
-  return target_out;
+  char ctos[difficulty+1];
+  int i =0;
+  for (i=0;i<difficulty;i++)
+  {
+    ctos[i]='0';
+  }
+  ctos[difficulty]='\0';
+  string str(ctos);
+  return str;
 }
 
-string Node::GenerateHash(int input)
+string Node::proofOfWork(int difficulty)
 {
-  int i;
-  setInput(input);
-  computeHash();
-  long int *ihash;
-  ihash=getHash();
-    string hashed;
-    stringstream h;
-    h<<hex<<ihash[0];
-    h<<hex<<ihash[1];
-    h<<hex<<ihash[2];
-    h<<hex<<ihash[3];
-    h<<hex<<ihash[4];
-    h<<hex<<ihash[5];
-    h<<hex<<ihash[6];
-    h<<hex<<ihash[7];
-    hashed=h.str();
-    return hashed;
+  string input,target,semilla;
+  input = packto_hash(this->ID,"25.045","0");
+  target = GenerateTarget(difficulty);
+  int nonce;
+  do
+  {
+    nonce++;
+    this->hash = sha256(input);
+    semilla = to_string(nonce);
+    input = packto_hash(this->ID,"25.045",semilla);
+    //cout<<this->hash.substr(0,difficulty)<<"::"<<target<<endl;
+  }while(this->hash.substr(0,difficulty)!=target);
+  cout<< "Mined"<<nonce<<endl;
+  return "0";
 }
 
-void Node::proofOfWork(int difficulty)
+string Node::packto_hash(char ID,string timestamp,string nonce)
 {
-
+  //
+  string input = ID+nonce+timestamp+"Telecom#13"+nonce+this->hash;
+  return input;
 }

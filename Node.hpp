@@ -5,7 +5,7 @@
 #define Node_hpp
 
 #include "Documentable.hpp"
-#include "Hash.hpp"
+#include "sha256.hpp"
 #include "PoW.hpp"
 
 #include <iostream>
@@ -14,8 +14,7 @@
 #include <string>
 #include <sstream>
 using namespace std;
-class Node : public Documentable,public Hash,
-public PoW
+class Node : public Documentable,public SHA256,public PoW
 {
 private:
   char ID;
@@ -39,6 +38,7 @@ private:
     uint8_t last_msg;
     int N_detected=0;
     string archivo="sybil_report.txt";
+    string hash;
     //std::ofstream output;
 public:
   /*Constructors*/
@@ -73,8 +73,8 @@ public:
   int LossPacket();
   virtual void GenerateDocument()override;
   void Clear_List();
-  int MakeTarget(string timestamp);
-  string GenerateHash(int input);
-  virtual void proofOfWork(int difficulty)override;
+  virtual string GenerateTarget(int difficulty)override;
+  virtual string packto_hash(char ID,string timestamp,string nonce)override;
+  virtual string proofOfWork(int difficulty)override;
 };
 #endif
