@@ -18,3 +18,7 @@ a message of type "Hello" and reads its RSSI. When the node has received 10 mess
 
 On this version we worked at Documentable function as generator of a
 report to sybil nodes detected.
+
+## Notes : 
+
+
